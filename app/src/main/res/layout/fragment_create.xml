@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    tools:context=".CreateFragment">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="57dp">
+
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="169dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp"
+        android:background="@drawable/button_rounder_corners"
+        android:bottomLeftRadius="30dp"
+        android:bottomRightRadius="30dp"
+        android:text="@string/btnAdd"
+        android:textColor="#FFF"
+        android:topLeftRadius="30dp"
+        android:topRightRadius="30dp" />
+
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="match_parent"
+        android:layout_height="382dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:background="@color/primaryTextColor"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/note_hint"
+        android:inputType="textMultiLine"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/place_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="100dp"
+        android:autoLink="all"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible" />
+
+
+</RelativeLayout>

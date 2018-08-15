@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="158dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="163dp"
+        android:background="@drawable/button_rounder_corners"
+        android:bottomLeftRadius="30dp"
+        android:bottomRightRadius="30dp"
+        android:text="@string/get_started"
+        android:textColor="#FFF"
+        android:topLeftRadius="30dp"
+        android:topRightRadius="30dp"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="207dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="153dp"
+        android:text="@string/tutorial_string_5"
+        android:textAlignment="textStart"
+        android:textSize="18sp" />
+</RelativeLayout>

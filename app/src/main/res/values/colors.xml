@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorAccent">#64d9ff</color>
+
+    <color name="colorPrimary">#00171f</color>
+
+    <color name="primaryLightColor">#293d46</color>
+
+    <color name="colorPrimaryDark">#000000</color>
+
+    <color name="secondaryColor">#00a8e8</color>
+
+    <color name="secondaryLightColor">#64d9ff</color>
+
+    <color name="secondaryDarkColor">#0079b5</color>
+
+    <color name="primaryTextColor">#ffffff</color>
+
+    <color name="secondaryTextColor">#000000</color>
+    <color name="selectedDot">#0079b5</color>
+    <color name="defaultDot">#00171f</color>
+</resources>

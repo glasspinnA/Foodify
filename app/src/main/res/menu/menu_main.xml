@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/editLocation"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_baseline_edit_24px"
+        app:showAsAction="ifRoom"
+        android:title="Edit Location"></item>
+
+    <item
+        android:id="@+id/addLocation"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_baseline_add_24px"
+        app:showAsAction="always"
+        android:title="Add Location"></item>
+
+    <item
+        android:id="@+id/privacy"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_baseline_info_24px"
+        app:showAsAction="always"
+        android:title="Add Location"></item>
+
+
+</menu>
