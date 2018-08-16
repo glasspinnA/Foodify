@@ -36,4 +36,6 @@
     <string name="tutorial_string_3">By clicking on a marker on the map, the marker shows your note</string>
     <string name="tutorial_string_4">Once you get inside the blue circle under the marker with your device, you will receive a notification reminding you to buy your stuff</string>
     <string name="tutorial_string_5">Are you ready to start?</string>
-</resources>
+    <string name="policy">This app uses your GPS location to track your location and track when you enter a geofence that you have specified. To remove the GPS premission go into the phones settings app </string>
+
+    </resources>
