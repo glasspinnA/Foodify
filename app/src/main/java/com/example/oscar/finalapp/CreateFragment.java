@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -49,30 +48,23 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
     private String KEY_ID,STORE_NAME,NOTE,ADRESS;
     private LatLng PLACE_LOCATION;
-
-
     private int position;
-    private ArrayList<MarkerLocation> arr = new ArrayList<>();
-    private ArrayList<MarkerLocation> arrCopy;
+    private ArrayList<MarkerLocation> markerArray = new ArrayList<>();
+    private ArrayList<MarkerLocation> copyMarkerArray;
     private boolean isEdit = false;
+
     public CreateFragment() {
         // Required empty public constructor
     }
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     /**
      * Metod som initierar komponenter som hör till detta fragmentet så som textViews och den widget för att kunna söka efter platser
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater -
+     * @param container -
+     * @param savedInstanceState -
+     * @return - view
      */
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,23 +73,26 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         ((MapsActivity) getActivity()).setActionBarTitle("Add Location");
         setHasOptionsMenu(true);
         Button btnAdd = view.findViewById(R.id.btnAdd);
-        mEtNote = view.findViewById(R.id.etNote);
         btnAdd.setOnClickListener(mButtonListener);
+
+        mEtNote = view.findViewById(R.id.etNote);
 
         mAutocompleteFragment = (PlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         mAutocompleteFragment.setOnPlaceSelectedListener(this);
         mPlaceDetailsText = view.findViewById(R.id.place_details);
-        mPlaceDetailsText.setText("");
+        mPlaceDetailsText.setText(",");
         setFilterForWidget();
 
         Bundle bundle = this.getArguments();
         if(bundle != null){
             position = bundle.getInt("position");
-            arr = bundle.getParcelableArrayList("markerArray");
-            arrCopy = new ArrayList<>(arr);
-            Log.d(TAG, String.valueOf(position) + " / " + String.valueOf(arr.size()));
+            markerArray = bundle.getParcelableArrayList("markerArray");
+            copyMarkerArray = new ArrayList<>(markerArray);
+            Log.d(TAG, String.valueOf(position) + " / " + String.valueOf(markerArray.size()));
             isEdit = true;
-            mEtNote.setText(arr.get(position).getNote().toString());
+            mEtNote.setText(markerArray.get(position).getNote().toString());
+            ((MapsActivity) getActivity()).setActionBarTitle("Edit your location");
+
         }
         return view;
     }
@@ -120,14 +115,14 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     private Button.OnClickListener mButtonListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(arr!=null && isEdit){
-                arr.remove(position);
-                mDataTransfer.removeMarker(arrCopy,arr);
+            if(markerArray !=null && isEdit){
+                markerArray.remove(position);
+                mDataTransfer.removeMarker(copyMarkerArray, markerArray);
                 isEdit = false;
                 mDataTransfer.isEdit(true);
             }
 
-            if(!TextUtils.isEmpty(mEtNote.getText()) || !mPlaceDetailsText.getText().toString().matches("")) {
+            if(!TextUtils.isEmpty(mEtNote.getText()) || mPlaceDetailsText.getText().toString().matches("")) {
                 getLocationValues();
                 passData(new MarkerLocation(PLACE_LOCATION,
                         NOTE,
@@ -171,8 +166,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
 
         // Format the returned place's details and display them in the TextView.
-        mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(), place.getId(),
-                place.getAddress(), place.getPhoneNumber(), place.getWebsiteUri()));
+        mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(), place.getId(),place.getAddress(), place.getPhoneNumber(), place.getWebsiteUri()));
 
         /*
         CharSequence attributions = place.getAttributions();
@@ -188,6 +182,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));
         return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));
     }
+
 
 
     /**
@@ -227,17 +222,20 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
 
+    /**
+     * Metod som blir kallad när fragmentet blir ihopbundet med dess Context
+     * @param context -
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mDataTransfer = (DataTransfer) context;
-
     }
 
     /**
-     * Metod som skickar en markerLocation objekt till interfacet DataTrasnfer
-     * Används för att kunna skicka data från fragment till Actvity
-     * @param markerLocation
+     * Metod som skickar en markerLocation objekt till interfacet DataTransfer
+     * Används för att kunna skicka data från fragment till MapsActivity
+     * @param markerLocation - Objekt av MarkerLocation innehållande information av den plats man har skapat
      */
     public void passData(MarkerLocation markerLocation) {
         mDataTransfer.addMarker(markerLocation);
