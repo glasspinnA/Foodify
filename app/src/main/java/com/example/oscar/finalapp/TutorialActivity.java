@@ -88,7 +88,8 @@ public class TutorialActivity extends AppCompatActivity {
         }
 
         /**
-         * Metod som startar MapsActivity när knapp som har knapplyssnare på sig blir tryckt på av användaren
+         * Metod som startar MapsActivity när knappen som har knapplyssnare på sig blir tryckt.
+         * Är det knapp på den sista sidan.
          */
         private class ButtonListener implements View.OnClickListener {
             @Override
