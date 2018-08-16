@@ -26,6 +26,11 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
         return null;
     }
 
+    /**
+     * Metod som intiterar komponenter till InfoWindow
+     * @param marker - Det marker objekt som infowindow ska hantera
+     * @return - view
+     */
     @Override
     public View getInfoContents(Marker marker) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.custom_infowindow,null);

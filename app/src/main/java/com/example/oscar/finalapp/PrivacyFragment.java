@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 
 /**
- * Fragment som hanterar den sida där användaren kan läsa om privacy policy
+ * Fragment som hanterar det fragment där användaren kan läsa om privacy policy
  * */
 public class PrivacyFragment extends Fragment {
 
@@ -21,12 +21,19 @@ public class PrivacyFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Kod för att hantera så att det finns en toolbar i detta fragmentet
+     */
     @Override
     public void onResume() {
         super.onResume();
         ((MapsActivity)getActivity()).supportInvalidateOptionsMenu();
     }
 
+
+    /**
+     * Kod för att hantera så att det finns en toolbar i detta fragmentet
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -39,6 +46,9 @@ public class PrivacyFragment extends Fragment {
     }
 
 
+    /**
+     * Kod för att hantera så att det finns en toolbar i detta fragmentet
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((MapsActivity) getActivity()).setActionBarTitle("Privacy Information");

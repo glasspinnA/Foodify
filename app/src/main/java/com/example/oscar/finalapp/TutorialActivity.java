@@ -19,6 +19,10 @@ import android.widget.Button;
 
 public class TutorialActivity extends AppCompatActivity {
 
+    /**
+     * Metod initerar kompontenter som finns i denna activityn
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,7 @@ public class TutorialActivity extends AppCompatActivity {
          * Metod som ändrar vilken bild (layout fil) som användaren ser
          * @param container
          * @param position - Vilken bild användaren är på
-         * @return - en layout fil
+         * @return - Den layout fil som ska visas
          */
         @Override
         public Object instantiateItem(ViewGroup container, int position) {

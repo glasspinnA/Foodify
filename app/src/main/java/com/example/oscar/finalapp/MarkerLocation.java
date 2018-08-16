@@ -11,11 +11,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MarkerLocation implements Parcelable {
     private LatLng mLatLng;
-
-    public void setmStoreName(String mStoreName) {
-        this.mStoreName = mStoreName;
-    }
-
     private String mNote;
     private String mId;
     private String mStoreName;
@@ -37,27 +32,6 @@ public class MarkerLocation implements Parcelable {
         this.mAdress = mAdress;
     }
 
-    protected MarkerLocation(Parcel in) {
-        mLatLng = in.readParcelable(LatLng.class.getClassLoader());
-        mNote = in.readString();
-        mId = in.readString();
-        mStoreName = in.readString();
-        mAdress = in.readString();
-    }
-
-
-    public static final Creator<MarkerLocation> CREATOR = new Creator<MarkerLocation>() {
-        @Override
-        public MarkerLocation createFromParcel(Parcel in) {
-            return new MarkerLocation(in);
-        }
-
-        @Override
-        public MarkerLocation[] newArray(int size) {
-            return new MarkerLocation[size];
-        }
-    };
-
     public LatLng getLatLng(){
         return mLatLng;
     }
@@ -78,6 +52,28 @@ public class MarkerLocation implements Parcelable {
         return mAdress;
     }
 
+    // Parcelable metoder nedan
+
+    protected MarkerLocation(Parcel in) {
+        mLatLng = in.readParcelable(LatLng.class.getClassLoader());
+        mNote = in.readString();
+        mId = in.readString();
+        mStoreName = in.readString();
+        mAdress = in.readString();
+    }
+
+
+    public static final Creator<MarkerLocation> CREATOR = new Creator<MarkerLocation>() {
+        @Override
+        public MarkerLocation createFromParcel(Parcel in) {
+            return new MarkerLocation(in);
+        }
+
+        @Override
+        public MarkerLocation[] newArray(int size) {
+            return new MarkerLocation[size];
+        }
+    };
 
 
     @Override

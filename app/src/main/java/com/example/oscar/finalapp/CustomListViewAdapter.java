@@ -44,11 +44,11 @@ public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
 
     /***
      * Metod som initierar alla komponenter så som knappar och textviews samt
-     * har en lyssnare på ta bort knappen ifall en användare klickar på knappen eller ej
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * har en knapplyssnare på "ta bort en plats" knappen och "redigera en plats" knappen i listviewn
+     * @param position - Positionen på det element som blir tryckt på av användaren i listviewn
+     * @param convertView -
+     * @param parent -
+     * @return - View
      */
     @NonNull
     @Override
@@ -59,7 +59,6 @@ public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
         TextView tvStoreName = view.findViewById(R.id.tvStoreName);
         TextView tvAdress = view.findViewById(R.id.tvAdress);
         TextView tvNote = view.findViewById(R.id.tvNote);
-        TextView tvEmptyList = view.findViewById(R.id.tvEmptyList);
 
 
 
@@ -104,8 +103,8 @@ public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
 
 
     /**
-     * Sätter lyssnare till
-     * @param listener
+     * Metod för att sätta lyssnare
+     * @param listener - knapplyssnare
      */
     public void setListener(AdapterListener listener) {
         this.mListener = listener;
