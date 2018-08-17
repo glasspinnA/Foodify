@@ -415,15 +415,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void addMarker(MarkerLocation data) {
-        mMap.addMarker(new MarkerOptions().position(data.getLatLng()).title(data.getStoreName()).snippet(data.getNote())).showInfoWindow();
-        addMarkerForGeofence(data.getLatLng().latitude,data.getLatLng().longitude,data.getStoreName());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(data.getLatLng()));
-        Circle circle = mMap.addCircle(new CircleOptions()
-                .center(data.getLatLng())
-                .radius(100)
-                .strokeColor(R.color.colorPrimaryDark)
-                .fillColor(R.color.secondaryDarkColor));
-        mArray.add(data);
+        if(mArray.size() == 0){
+            mMap.addMarker(new MarkerOptions().position(data.getLatLng()).title(data.getStoreName()).snippet(data.getNote())).showInfoWindow();
+            addMarkerForGeofence(data.getLatLng().latitude,data.getLatLng().longitude,data.getStoreName());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(data.getLatLng()));
+            Circle circle = mMap.addCircle(new CircleOptions()
+                    .center(data.getLatLng())
+                    .radius(100)
+                    .strokeColor(R.color.colorPrimaryDark)
+                    .fillColor(R.color.secondaryDarkColor));
+            mArray.add(data);
+        }else{
+            for(MarkerLocation m : mArray){
+                if(!m.getId().equals(data.getId())){
+                    mMap.addMarker(new MarkerOptions().position(data.getLatLng()).title(data.getStoreName()).snippet(data.getNote())).showInfoWindow();
+                    addMarkerForGeofence(data.getLatLng().latitude,data.getLatLng().longitude,data.getStoreName());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(data.getLatLng()));
+                    Circle circle = mMap.addCircle(new CircleOptions()
+                            .center(data.getLatLng())
+                            .radius(100)
+                            .strokeColor(R.color.colorPrimaryDark)
+                            .fillColor(R.color.secondaryDarkColor));
+                    mArray.add(data);
+                    break;
+                }else{
+                    Log.d(TAG,"LOCATION FINNS REDAN");
+                }
+            }
+        }
     }
 
 
