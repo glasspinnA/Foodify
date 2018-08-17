@@ -89,4 +89,29 @@ public class MarkerLocation implements Parcelable {
         parcel.writeString(mStoreName);
         parcel.writeString(mAdress);
     }
+
+    @Override
+    public String toString() {
+        return mLatLng.latitude + "," + mLatLng.longitude + "," + mNote + "," + mId + "," + mStoreName + "," + mAdress;
+    }
+
+    public void setmLatLng(LatLng mLatLng) {
+        this.mLatLng = mLatLng;
+    }
+
+    public void setmNote(String mNote) {
+        this.mNote = mNote;
+    }
+
+    public void setmId(String mId) {
+        this.mId = mId;
+    }
+
+    public void setmStoreName(String mStoreName) {
+        this.mStoreName = mStoreName;
+    }
+
+    public void setmAdress(String mAdress) {
+        this.mAdress = mAdress;
+    }
 }

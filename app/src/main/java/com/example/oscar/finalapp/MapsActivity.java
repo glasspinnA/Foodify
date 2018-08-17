@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -39,7 +40,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,6 +75,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private boolean isEdit = false;
 
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +92,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mGeofencingClient = LocationServices.getGeofencingClient(this);
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences("startUp", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("startUp", Context.MODE_PRIVATE);
+
         if(sharedPreferences.getBoolean("isFirstStart",true)){
             sharedPreferences.edit().putBoolean("isFirstStart",false).commit();
             Intent intent = new Intent(getApplicationContext(),TutorialActivity.class);
             finish();
             startActivity(intent);
         }
+
+
 
     }
 
@@ -98,6 +115,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        int counter = 0;
+
+        if(mArray != null){
+            for(MarkerLocation i : mArray){
+                String convertedToString = String.valueOf((i).toString());  //method 1
+                sharedPreferences.edit().putString("mKey" + String.valueOf(counter), convertedToString).commit();
+                counter++;
+            }
+
+            sharedPreferences.edit().putInt("mCounter",counter).commit();
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -116,6 +148,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setInfoWindowAdapter(infoWindowAdapter);
 
 
+
         /*
         if(mArray!=null){
             for(MarkerLocation mLocation : mArray){
@@ -130,6 +163,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         */
+
+        ArrayList<String> test = new ArrayList<>();
+
+        if(sharedPreferences.contains("mCounter")){
+            int counter = sharedPreferences.getInt("mCounter",-1);
+            for(int i=0; i<counter; i++){
+                String testShared = sharedPreferences.getString("mKey" +String.valueOf(i),null);
+                Log.d(TAG, "TEST SHARED: " +testShared);
+
+                test.add(testShared);
+
+                String[] parts = null;
+
+                for(String t : test){
+                    Log.d(TAG,t);
+                    parts = t.split(",");
+                }
+
+                LatLng latLng = new LatLng(Double.parseDouble(parts[0]),Double.parseDouble(parts[1]));
+                mArray.add(new MarkerLocation(latLng,parts[2],parts[3],parts[4],parts[5]));
+
+                for(MarkerLocation j : mArray){
+                    Log.d(TAG,"J" + j.getNote());
+                    mMap.addMarker(new MarkerOptions().position(j.getLatLng()).title(j.getStoreName()).snippet(j.getNote())).showInfoWindow();
+
+                }
+
+            }
+        }else {
+            Log.d(TAG,"NO");
+        }
 
         enableMyLocation();
     }
