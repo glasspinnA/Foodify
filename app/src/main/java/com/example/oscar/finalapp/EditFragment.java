@@ -36,6 +36,10 @@ public class EditFragment extends Fragment implements AdapterListener {
     }
 
 
+    /**
+     * Metod som kallas när Fragmentet blir åter onResume
+     * Uppdaterar listviewn i fragmentet med uppdaterad data om det finns någon sådan data
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -46,6 +50,11 @@ public class EditFragment extends Fragment implements AdapterListener {
         mListView.setAdapter(mAdapter);
     }
 
+    /**
+     * Kod för att hantera hur actionbaren i detta fragment ser ut
+     * @param menu -
+     * @param inflater -
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -58,7 +67,13 @@ public class EditFragment extends Fragment implements AdapterListener {
     }
 
 
-
+    /**
+     * Metod för att intitierar komponenter som finns i detta fragmentet.
+     * @param inflater -
+     * @param container -
+     * @param savedInstanceState -
+     * @return - view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
@@ -89,12 +104,21 @@ public class EditFragment extends Fragment implements AdapterListener {
     }
 
 
+    /**
+     * Metod som blir kallad när fragmentet blir ihopbundet med dess Context
+     * @param context -
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mDataTransfer = (DataTransfer) context;
     }
 
+    /**
+     * Metod som kallas när användaren klickar på ta bort knappen i listviewn
+     * Metoden tar bort den rad i lisview som användaren har tryckt på (Tar bort det markerLocation objektet)
+     * @param name - Det MarkerLocation objekt (Markör) som ska tas bort
+     */
     @Override
     public void onClick(MarkerLocation name) {
         Log.d(TAG,name.getId());
@@ -109,6 +133,13 @@ public class EditFragment extends Fragment implements AdapterListener {
         Log.d(TAG,"Size of copy before removal:" + String.valueOf(arrCopy.size()));
     }
 
+    /**
+     * Metod som kallas när när användaren har tryckt på edit knappen i listviewn
+     * Metoden skickar vilken position (rad i listview) som har blivit tryckt på till
+     * CreateFragment.
+     * @param position - Positionen i listview som har blivit tryckt på av användaren, används sedan för att
+     *                 veta vilken position i arrayen med alla MarkerLocation objekt (Markörer) man ska redigera med ny data
+     */
     @Override
     public void editMarker(int position) {
         Bundle bundle = new Bundle();

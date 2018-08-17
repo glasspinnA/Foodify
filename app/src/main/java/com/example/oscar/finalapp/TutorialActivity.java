@@ -45,7 +45,7 @@ public class TutorialActivity extends AppCompatActivity {
 
 
         /**
-         * Metod som ändrar vilken bild (layout fil) som användaren ser
+         * Metod som ändrar vilken bild i guiden/walkthrough (layout fil) som användaren ser
          * @param container
          * @param position - Vilken bild användaren är på
          * @return - Den layout fil som ska visas
@@ -89,7 +89,6 @@ public class TutorialActivity extends AppCompatActivity {
 
         /**
          * Metod som startar MapsActivity när knappen som har knapplyssnare på sig blir tryckt.
-         * Är det knapp på den sista sidan.
          */
         private class ButtonListener implements View.OnClickListener {
             @Override

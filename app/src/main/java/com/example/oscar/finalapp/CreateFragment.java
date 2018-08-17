@@ -59,7 +59,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
 
     /**
-     * Metod som initierar komponenter som hör till detta fragmentet så som textViews och den widget för att kunna söka efter platser
+     * Metod som initierar komponenter som hör till detta fragmentet så som textViews och den widget för att kunna söka efter platser.
+     * Tar även emot data ifrån EditFragment ifall användaren har tryckt på redigera knappen i EditFragment.
      * @param inflater -
      * @param container -
      * @param savedInstanceState -
@@ -110,7 +111,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
 
     /**
-     * Knapplyssnare som lyssnar ifall användaren klickar på knappen för att lägga till en plats objekt
+     * Knapplyssnare metod
+     * Metod som omvandlar data om en plats som användaren önskar lägga till till ett MarkerLocation objekt
      */
     private Button.OnClickListener mButtonListener = new Button.OnClickListener() {
         @Override
@@ -196,8 +198,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
     /**
      * Metod för att hantera layouten för actionbaren i detta fragmentent
-     * @param menu
-     * @param inflater
+     * @param menu -
+     * @param inflater -
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -233,8 +235,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
     /**
-     * Metod som skickar en markerLocation objekt till interfacet DataTransfer
-     * Används för att kunna skicka data från fragment till MapsActivity
+     * Metod som skickar ett MarkerLocation objekt via interfacet DataTransfer till MapsActivity
      * @param markerLocation - Objekt av MarkerLocation innehållande information av den plats man har skapat
      */
     public void passData(MarkerLocation markerLocation) {
