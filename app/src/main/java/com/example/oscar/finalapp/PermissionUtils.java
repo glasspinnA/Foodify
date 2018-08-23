@@ -27,9 +27,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+
 /**
- * Utility class for access to runtime permissions.
+ * Kod för att hantera Permissions för GPS i applikationen
+ * Har andvänt mig utav Googles egna samples för hur man ska aktivera så att man kan se sin egna position på Google maps kartan.
+ * Koden som används här kan hittas på: https://github.com/googlemaps/android-samples/blob/master/ApiDemos/java/app/src/main/java/com/example/mapdemo/PermissionUtils.java
+ *
  */
+
 public abstract class PermissionUtils {
 
     /**

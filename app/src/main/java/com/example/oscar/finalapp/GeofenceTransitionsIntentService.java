@@ -19,6 +19,8 @@ import java.util.List;
 
 /**
  * Klass som används hantera notifikationer när en användare passerar ett geofence
+ * Har följt Android officiella guiden för geofences enligt https://developer.android.com/training/location/geofencing
+ * Har dock modifierat kod som finns i guiden för att anpassa efter mina krav för denna klassen
  */
 
 public class GeofenceTransitionsIntentService extends IntentService {
@@ -41,28 +43,17 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         if (geofencingEvent.hasError()) {
             String errorMessage = String.valueOf(geofencingEvent.getErrorCode());
-            Log.e(TAG, errorMessage);
             return;
         }
 
-        // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-        // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
-
-            // Get the geofences that were triggered. A single event can trigger
-            // multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-
-            // Get the transition details as a String.
-            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-                    triggeringGeofences
+            String geofenceTransitionDetails = getGeofenceTransitionDetails(triggeringGeofences
             );
 
-            // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails, this);
-            Log.i(TAG, geofenceTransitionDetails);
         }
     }
 
@@ -96,11 +87,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
-        String CHANNEL_ID = "Remainderly";
+        String CHANNEL_ID = "Foodify";
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
-                        .setContentTitle("Remainderly")
+                        .setContentTitle("Foodify")
                         .setContentText("You have entered " + geofenceTransitionDetails)
                         .setVibrate(new long[] {0,200,400,600,800,1000})
                         .setContentIntent(notificationPendingIntent);

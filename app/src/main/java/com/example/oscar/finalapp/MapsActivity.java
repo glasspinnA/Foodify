@@ -43,6 +43,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Activity klass som representerar den vy i appen där man ser Google Maps kartan m.m
+ */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, DataTransfer {
 
@@ -59,10 +62,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<Geofence> mGeofenceList = new ArrayList<>();
     private ArrayList<String> mMakersToRemoveArray;
     private ArrayList<MarkerLocation> mCopyMarkerArray = new ArrayList<>();
-
     private boolean isEdit = false;
 
 
+    /**
+     * Metod som initierar komponenter som hör till denna activity så som så som actionbar.
+     * Metoden kontrollerar även ifall det är första gången applikationen startas, då om det är fallet så ska TutorialActivity
+     * startas för att ge användaren, guiden till hur man använder applikationen
+     * @param savedInstanceState -
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,13 +108,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Metod som körs när Google Maps kartan initieras.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -114,20 +116,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(infoWindowAdapter);
-        
+
         enableMyLocation();
     }
 
 
     /**
-     * Metod som gör det möjligt att se sin egna position på kartan
+     * Metod som kontrollerar ifall applikationen har tillåtelse för att använda mobilens GPS
+     * Om tillåtelse finns, gör metoden så att det är möjligt att se sin egna position på Google maps kartan
      */
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE, Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
+        }
+        else if (mMap != null) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -141,7 +143,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     /**
-     * Metod som lägger till en geofence en plats
+     * Metod som lägger till en geofence för en mataffär/inköpslista
      * @param lat - Latituden för platsen som ska läggas till
      * @param lng - Longituden för platsen som ska läggas till
      * @param storeName - Namnet på den plats som ska läggas till
@@ -195,10 +197,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG,"Removal of marker sucess!");
                         if(isEdit == false){
                             removeMarkersFromMap();
-                            Log.d(TAG,"KOMMER IN HÄR");
                         }else{
                             removeMarkersFromMapEdit();
                         }
@@ -208,12 +208,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG,"Removal of marker sucess!");
                         Toast.makeText(getApplicationContext(),R.string.markerRemovedFail, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+    /**
+     * Metod som tar bort markörer från kartan när man redigerar en inköpslista objekt
+     */
     private void removeMarkersFromMapEdit() {
         mMap.clear();
 
@@ -229,7 +231,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Metod som tar bort markörer från kartan
+     * Metod som tar bort markörer från kartan när användaren väljer att radera en inköpslista
      */
     private void removeMarkersFromMap() {
         mMap.clear();
@@ -247,6 +249,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mArray = mCopyMarkerArray;
     }
 
+
+    /**
+     * Metod som används för att specefiera på vilket sätt geofences för inköpslistorna ska fungera
+     * I detta fallet ska geofences triggas endast när användaren går in i ett geofence
+     * Metod hämtad från https://developer.android.com/training/location/geofencing#java
+     * @return -
+     */
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
@@ -254,23 +263,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return builder.build();
     }
 
+
+    /**
+     * Metod som triggar igång så att notifikationer kan skickas ut till användaren när användaren går in i ett geofence
+     * Metod hämtad från https://developer.android.com/training/location/geofencing#java
+     * @return-
+     */
     private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
         if (mGeofencePendingIntent != null) {
             return mGeofencePendingIntent;
         }
         Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
-        mGeofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
+        mGeofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return mGeofencePendingIntent;
     }
 
 
     /**
      * Metod som hämtar data efter att telefon har blivit roterad
-     * @param savedInstanceState
+     * @param savedInstanceState -
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -294,18 +305,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    /**
+     * Metod för att hantera actionbaren / app baren
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+
+    /**
+     * Metod för att sätta rätt titel på actionbaren / app baren när användaren trycker på bakåtknappen på telefonen
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         mTopToolbar.setTitle("Map");
     }
 
+
+    /**
+     * Metod som startar Fragments beroende vilken knapp i app baren / actionbaren som användaren trycker på
+     * @param item -
+     * @return -
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getFragmentManager();
@@ -338,60 +364,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
-    private void splitArray(ArrayList<MarkerLocation> copyArray) {
-        Log.d(TAG,"Size of removal array " + String.valueOf(copyArray.size()));
-        Log.d(TAG,"Size of orginal array " + String.valueOf(mArray.size()));
-        // Make the two lists
-        ArrayList<String> orginalMarkerList = new ArrayList<>();
-        for (MarkerLocation i : mArray) {
-            orginalMarkerList.add(i.getId());
-        }
-        ArrayList<String> copyMarkerList = new ArrayList<>();
-        for (MarkerLocation j : copyArray) {
-            copyMarkerList.add(j.getId());
-        }
-
-        // Prepare a mMakersToRemoveArray
-        mMakersToRemoveArray = new ArrayList<String>(orginalMarkerList);
-        mMakersToRemoveArray.addAll(copyMarkerList);
-
-        // Prepare an intersection
-        ArrayList<String> intersection = new ArrayList<String>(orginalMarkerList);
-        intersection.retainAll(copyMarkerList);
-
-        // Subtract the intersection from the mMakersToRemoveArray
-        mMakersToRemoveArray.removeAll(intersection);
-
-        // Print the result
-        for (String n : mMakersToRemoveArray) {
-            System.out.println("BASH " + n);
-        }
-
-        if (mMakersToRemoveArray != null && mMakersToRemoveArray.size() > 0) {
-            removeMarkerForGeofence(mMakersToRemoveArray);
-        }
-    }
-
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
 
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
             enableMyLocation();
         } else {
-            // Display the missing permission error dialog when the fragments resume.
             mPermissionDenied = true;
         }
     }
 
-    private ArrayList<MarkerLocation> test = new ArrayList<>();
 
     /**
      * Metod som lägger till en markör på kartan
@@ -423,13 +408,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mArray.add(data);
                     break;
                 }else{
-                    Log.d(TAG,"LOCATION FINNS REDAN");
+                    Toast.makeText(getApplication(),"THE LOCATION ALREADY EXIST",Toast.LENGTH_LONG).show();
                 }
             }
         }
     }
 
 
+    /**
+     * Metod för att ta bort markörer
+     * @param copyArray - Array som innehåller alla MarkerLocation objekt innan bortagning
+     * @param orginalMarkerArray - Array som innehåller alla MarkerLocation objekt efter bortagning av specefik MarkerLocation objekt
+     */
     @Override
     public void removeMarker(ArrayList<MarkerLocation> copyArray, ArrayList<MarkerLocation> orginalMarkerArray) {
         this.mArray = orginalMarkerArray;
@@ -437,18 +427,55 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         splitArray(copyArray);
     }
 
+    /**
+     * Metod används för att tar reda på vilket MarkerLocation objekt som har blivit bortaget, när användaren har tagit bort en inköpslista
+     * från Listview i EditFragment. Detta behövs ta reda på då man måste avregistrerar det geofencet för det bortagna inköpslista objektet
+     * man har nyss tagit bort. (Så att det inte ligger kvar ett geofence runt en mataffär där ingen inköpslista existerar längre)
+     *
+     * Genom att man har en array som innehåller alla MarkerLocation objekt innan bortagning av det aktuella objektet/inköpslistan
+     * och en annan array som innehåller alla MarkerLocatio objekt efter bortagning av det aktuella objektet, så kan man ta reda på vilket
+     * objekt som saknas i arreyen som innnehåller alla MarkerLocation objekt innan borttagning genom att jämföra arrayerna med varandra.
+     * De objekt som saknas i är de som har blivit bortagna av användaren och ska sådelse avregistreras från geofence
+     * @param copyArray
+     */
+    private void splitArray(ArrayList<MarkerLocation> copyArray) {
+        ArrayList<String> orginalMarkerArr = new ArrayList<>();
+        for (MarkerLocation i : mArray) {
+            orginalMarkerArr.add(i.getId());
+        }
+        ArrayList<String> copyMarkerArr = new ArrayList<>();
+        for (MarkerLocation j : copyArray) {
+            copyMarkerArr.add(j.getId());
+        }
+
+        mMakersToRemoveArray = new ArrayList<>(orginalMarkerArr);
+        mMakersToRemoveArray.addAll(copyMarkerArr);
+
+        ArrayList<String> overFlowMarkerArray = new ArrayList<>(orginalMarkerArr);
+        overFlowMarkerArray.retainAll(copyMarkerArr);
+
+        mMakersToRemoveArray.removeAll(overFlowMarkerArray);
+
+
+        if (mMakersToRemoveArray != null && mMakersToRemoveArray.size() > 0) {
+            removeMarkerForGeofence(mMakersToRemoveArray);
+        }
+    }
+
+    /**
+     * @param isEdit - Boolean som är True om det är redigering eller bortagning av inköpslista som sker.
+     *               Detta behövs veta för dessa två funktionerna triggar olika metoder och kodrader i koden.
+     */
     @Override
     public void isEdit(boolean isEdit) {
         this.isEdit = isEdit;
     }
 
+    /**
+     * Metod som retunerar array som innehåller MarkerLocation objekt
+     * @return - Array innehållandes MarkerLocation objekt
+     */
     public ArrayList<MarkerLocation> getArray() {
-        Log.d(TAG,"mArray " + mArray.get(2).getNote());
-        if(test.size() == 2){
-
-            Log.d(TAG,"TEST" + test.get(1).getNote());
-        }
-        Log.d(TAG,"TEST" + test.get(0).getNote());
         return mArray;
     }
 }
