@@ -82,8 +82,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(sharedPreferences.getBoolean("isFirstStart",true)){
             sharedPreferences.edit().putBoolean("isFirstStart",false).commit();
             Intent intent = new Intent(getApplicationContext(),TutorialActivity.class);
-            finish();
             startActivity(intent);
+            finish();
         }
 
     }
@@ -114,23 +114,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(infoWindowAdapter);
-
-
-        /*
-        if(mArray!=null){
-            for(MarkerLocation mLocation : mArray){
-                addMarkerForGeofence(mLocation.getLatLng().latitude, mLocation.getLatLng().longitude, mLocation.getStoreName());
-                mMap.addMarker(new MarkerOptions().position(mLocation.getLatLng()).title(mLocation.getStoreName()).snippet(mLocation.getNote()));
-                Circle circle = mMap.addCircle(new CircleOptions()
-                        .center(mLocation.getLatLng())
-                        .radius(100)
-                        .strokeColor(R.color.colorPrimaryDark)
-                        .fillColor(R.color.secondaryDarkColor));
-            }
-        }
-
-        */
-
+        
         enableMyLocation();
     }
 
