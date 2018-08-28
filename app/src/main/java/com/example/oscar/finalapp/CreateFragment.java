@@ -79,6 +79,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         mEtNote = view.findViewById(R.id.etNote);
         mAutocompleteFragment = (PlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         mAutocompleteFragment.setOnPlaceSelectedListener(this);
+        mAutocompleteFragment.setHint("Enter an address");
         mPlaceDetailsText = view.findViewById(R.id.place_details);
         mPlaceDetailsText.setText("");
         mAutocompleteFragment.getView().findViewById(R.id.place_autocomplete_clear_button).setOnClickListener(clearButtonListener);
