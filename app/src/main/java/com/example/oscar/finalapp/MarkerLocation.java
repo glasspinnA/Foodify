@@ -6,7 +6,11 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Ett objekt som innehåller all nödvändig data som applikationen kommer använda sig av en plats
+ * MarkerLocation är ett objekt som innehåller all nödvändig data som behövs för att applikationen ska kunna
+ * sätta ut markörer på kartan för de inköpslistor som finns, visa vilka inköpslistor det finns i listview i EditFragment m.m
+ * Ett markerlocation objekt skapas för varje inköpslista helt enkelt.
+ *
+ * @author Oscar
  */
 
 public class MarkerLocation implements Parcelable {

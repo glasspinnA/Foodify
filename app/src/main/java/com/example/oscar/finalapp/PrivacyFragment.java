@@ -13,16 +13,15 @@ import android.view.ViewGroup;
 
 /**
  * Fragment som hanterar det fragment där användaren kan läsa om privacy policy
- * */
+ * @author Oscar
+ */
 public class PrivacyFragment extends Fragment {
-
-
     public PrivacyFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Kod för att hantera så att det finns en toolbar i detta fragmentet
+     * Kod för att hantera actionbaren i detta fragmentet
      */
     @Override
     public void onResume() {
@@ -32,7 +31,7 @@ public class PrivacyFragment extends Fragment {
 
 
     /**
-     * Kod för att hantera så att det finns en toolbar i detta fragmentet
+     * Kod för att hantera actionbaren i detta fragmentet
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -47,7 +46,7 @@ public class PrivacyFragment extends Fragment {
 
 
     /**
-     * Kod för att hantera så att det finns en toolbar i detta fragmentet
+     * Kod för att hantera actionbaren i detta fragmentet
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

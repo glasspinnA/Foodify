@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.Marker;
 
 /**
  * Adapter för att göra det möjligt att skräddarsy hur de rutor som dyker upp ovanför markörer när man klickar på en markör i kartan ska se ut.
+ * @author Oscar
  */
 
 public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{

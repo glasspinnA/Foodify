@@ -45,10 +45,10 @@ import java.util.List;
 
 /**
  * Activity klass som representerar den vy i appen där man ser Google Maps kartan m.m
+ * @author Oscar
  */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, DataTransfer {
-
     private GoogleMap mMap;
     private Toolbar mTopToolbar;
     boolean mPermissionDenied = false;
@@ -85,7 +85,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mGeofencingClient = LocationServices.getGeofencingClient(this);
 
-
         SharedPreferences sharedPreferences = getSharedPreferences("startUp", Context.MODE_PRIVATE);
         if(sharedPreferences.getBoolean("isFirstStart",true)){
             sharedPreferences.edit().putBoolean("isFirstStart",false).commit();
@@ -96,7 +95,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
     /**
      * Metod för att ändra titeln på actionbaren
      * @param title - Den titel man vill sätta på actionbaren
@@ -106,17 +104,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
     /**
      * Metod som körs när Google Maps kartan initieras.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(infoWindowAdapter);
-
         enableMyLocation();
     }
 
@@ -218,9 +213,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private void removeMarkersFromMapEdit() {
         mMap.clear();
-
         for(MarkerLocation m : mArray){
-            Log.d(TAG,m.getStoreName());
             mMap.addMarker(new MarkerOptions().position(m.getLatLng()).title(m.getStoreName()).snippet(m.getNote())).showInfoWindow();
             Circle circle = mMap.addCircle(new CircleOptions()
                     .center(m.getLatLng())
@@ -235,9 +228,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private void removeMarkersFromMap() {
         mMap.clear();
-
         for(MarkerLocation m : mCopyMarkerArray){
-            Log.d(TAG,m.getStoreName());
             mMap.addMarker(new MarkerOptions().position(m.getLatLng()).title(m.getStoreName()).snippet(m.getNote())).showInfoWindow();
             Circle circle = mMap.addCircle(new CircleOptions()
                     .center(m.getLatLng())
@@ -364,12 +355,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    /**
+     * Metod som kontrollerar ifall ett permisison är tillåtet eller ej, och därmed utför olika funktioner beroende på
+     * om permissionet är godkänt eller ej
+     * @param requestCode - Kod för request
+     * @param permissions - String som innehåller det akutella permissionet
+     * @param grantResults - Visar ifall permission är tillåtet eller ej
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
-
         if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
             enableMyLocation();
         } else {
@@ -453,9 +450,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ArrayList<String> overFlowMarkerArray = new ArrayList<>(orginalMarkerArr);
         overFlowMarkerArray.retainAll(copyMarkerArr);
-
         mMakersToRemoveArray.removeAll(overFlowMarkerArray);
-
 
         if (mMakersToRemoveArray != null && mMakersToRemoveArray.size() > 0) {
             removeMarkerForGeofence(mMakersToRemoveArray);

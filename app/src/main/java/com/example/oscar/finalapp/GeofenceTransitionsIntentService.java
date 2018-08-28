@@ -18,13 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Klass som används hantera notifikationer när en användare passerar ett geofence
- * Har följt Android officiella guiden för geofences enligt https://developer.android.com/training/location/geofencing
- * Har dock modifierat kod som finns i guiden för att anpassa efter mina krav för denna klassen
+ * Klass som har i syfte att hantera notifikationer när en användare går in i ett geofence
+ *
+ * Jag har följt Androids guide för geofences för denna klasen enligt https://developer.android.com/training/location/geofencing
+ * Har modiferat kod och lagt till kod i denna klassen jämfört med i dokumentation för att anpassa efter applikationens krav
+ *
+ * @author Oscar
  */
 
 public class GeofenceTransitionsIntentService extends IntentService {
-
     private static final String TAG  = "GeofenceIntent";
 
     public GeofenceTransitionsIntentService() {
@@ -34,25 +36,16 @@ public class GeofenceTransitionsIntentService extends IntentService {
     /**
      * Metod som ta reda på vilka geofences användaren befinner sig i.
      * Metoden delegerar till andra metoder i klassen att en notifikering ska skickas ut till användaren, som ska innehålla
-     * kort information om vilket geofence (affär) användaren är i närheten av
+     * kort information om vilket geofence (affär) användaren har gått in i.
      * @param intent
      */
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-
-        if (geofencingEvent.hasError()) {
-            String errorMessage = String.valueOf(geofencingEvent.getErrorCode());
-            return;
-        }
-
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
-
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-            String geofenceTransitionDetails = getGeofenceTransitionDetails(triggeringGeofences
-            );
-
+            String geofenceTransitionDetails = getGeofenceTransitionDetails(triggeringGeofences);
             sendNotification(geofenceTransitionDetails, this);
         }
     }
@@ -86,7 +79,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-
         String CHANNEL_ID = "Foodify";
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -98,7 +90,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
         builder.setAutoCancel(true);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         mNotificationManager.notify(0, builder.build());
     }
 

@@ -32,10 +32,10 @@ import java.util.ArrayList;
 
 
 /**
- * Fragment för den sida inuti applikationen där man skapar påminelse för en plats samt skapar en inköpslista
+ * Fragment för den vy i applikationen där användaren skapar en inköpslista för en mataffär
+ * @author Oscar
  */
 public class CreateFragment extends Fragment implements PlaceSelectionListener {
-
     private EditText mEtNote;
     private LatLng mLatLng;
     private CharSequence mStoreName;
@@ -45,7 +45,6 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     private PlaceAutocompleteFragment mAutocompleteFragment;
     private DataTransfer mDataTransfer;
     private static final String TAG = "CreateFragment";
-
     private String KEY_ID,STORE_NAME,NOTE,ADRESS;
     private LatLng PLACE_LOCATION;
     private int position;
@@ -75,9 +74,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         setHasOptionsMenu(true);
         Button btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(mButtonListener);
-
         mEtNote = view.findViewById(R.id.etNote);
-
         mAutocompleteFragment = (PlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         mAutocompleteFragment.setOnPlaceSelectedListener(this);
         mPlaceDetailsText = view.findViewById(R.id.place_details);
@@ -89,7 +86,6 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
             position = bundle.getInt("position");
             markerArray = bundle.getParcelableArrayList("markerArray");
             copyMarkerArray = new ArrayList<>(markerArray);
-            Log.d(TAG, String.valueOf(position) + " / " + String.valueOf(markerArray.size()));
             isEdit = true;
             mEtNote.setText(markerArray.get(position).getNote().toString());
             ((MapsActivity) getActivity()).setActionBarTitle("Edit your location");
@@ -99,7 +95,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
     /**
-     * Metod som sätter ett filter. Filltret filltrerar mellan sökreulstat så svenska butiker/matäffrer priorirteras i sökresultatet för användaren.
+     * Metod som sätter ett filter.
+     * Filltret filltrerar bland sökresultaten så att svenska mataffärer priorirteras när användaren söker efter en mataffär i sökfältet
      */
     private void setFilterForWidget() {
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
@@ -112,7 +109,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
     /**
      * Knapplyssnare metod
-     * Metod som omvandlar data om en plats som användaren önskar lägga till till ett MarkerLocation objekt
+     * Metod som skapar ett MarkerLocation objekt för den inköpslista som användaren håller på att skapa.
      */
     private Button.OnClickListener mButtonListener = new Button.OnClickListener() {
         @Override
@@ -142,7 +139,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     };
 
     /**
-     * Metod som hämtar värden för en plats och sparar dem i respektive variabel
+     * Metod som hämtar värden för en geografisk plats och sparar dem i respektive variabel
      */
     public void getLocationValues(){
         KEY_ID = mStoreName.toString();
@@ -154,37 +151,21 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
 
 
     /**
-     * Metod som hämtar den information som kommer från Google efter att man har sökt efter en plats i widgeten
+     * Metod som hämtar information som finns tillgänglig för det sökresultat man har tryckt på i sökfältet när man söker efter mataffärer
      * @param place - Ett Place objekt från Google som innehåller all information om den plats man har sökt efter i widgeten
      */
     @Override
     public void onPlaceSelected(Place place) {
-        Log.i(TAG, "Place Selected: " + place.getName());
         mLatLng = place.getLatLng();
         mId = place.getId();
         mStoreName = place.getName();
         mAdress = place.getAddress();
-
-
-
-        // Format the returned place's details and display them in the TextView.
         mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(), place.getId(),place.getAddress(), place.getPhoneNumber(), place.getWebsiteUri()));
-
-        /*
-        CharSequence attributions = place.getAttributions();
-        if (!TextUtils.isEmpty(attributions)) {
-            mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
-        } else {
-            mPlaceAttribution.setText("");
-        }
-        */
     }
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id, CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));
         return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));
     }
-
 
 
     /**
@@ -219,7 +200,6 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
      */
     @Override
     public void onError(Status status) {
-        Log.e(TAG, "onError: Status = " + status.toString());
         Toast.makeText(getActivity(), "Place selection failed: " + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
     }
 
@@ -235,8 +215,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
     /**
-     * Metod som skickar ett MarkerLocation objekt via interfacet DataTransfer till MapsActivity
-     * @param markerLocation - Objekt av MarkerLocation innehållande information av den plats man har skapat
+     * Metod som skickar ett MarkerLocation objekt med interfacet DataTransfer till MapsActivity
+     * @param markerLocation - Objekt av MarkerLocation innehållande information av den plats och inköpslista man har skapat
      */
     public void passData(MarkerLocation markerLocation) {
         mDataTransfer.addMarker(markerLocation);

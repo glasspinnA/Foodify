@@ -29,10 +29,10 @@ import android.widget.Toast;
 
 
 /**
- * Kod för att hantera Permissions för GPS i applikationen
- * Har andvänt mig utav Googles egna samples för hur man ska aktivera så att man kan se sin egna position på Google maps kartan.
- * Koden som används här kan hittas på: https://github.com/googlemaps/android-samples/blob/master/ApiDemos/java/app/src/main/java/com/example/mapdemo/PermissionUtils.java
+ * Klass för att hantera permissions för GPSen i applikationen
  *
+ * För denna klassen har jag följt dokumentation från https://developers.google.com/maps/documentation/android-sdk/location
+ * Koden för denna klassen som används i ett av Googles code samples hittas på: https://github.com/googlemaps/android-samples/blob/master/ApiDemos/java/app/src/main/java/com/example/mapdemo/PermissionUtils.java
  */
 
 public abstract class PermissionUtils {
@@ -44,11 +44,8 @@ public abstract class PermissionUtils {
     public static void requestPermission(AppCompatActivity activity, int requestId,
                                          String permission, boolean finishActivity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-            // Display a dialog with rationale.
-            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
-                    .show(activity.getSupportFragmentManager(), "dialog");
+            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity).show(activity.getSupportFragmentManager(), "dialog");
         } else {
-            // Location permission has not been granted yet, request it.
             ActivityCompat.requestPermissions(activity, new String[]{permission}, requestId);
 
         }
@@ -60,8 +57,7 @@ public abstract class PermissionUtils {
      *
      * @see android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
      */
-    public static boolean isPermissionGranted(String[] grantPermissions, int[] grantResults,
-                                              String permission) {
+    public static boolean isPermissionGranted(String[] grantPermissions, int[] grantResults, String permission) {
         for (int i = 0; i < grantPermissions.length; i++) {
             if (permission.equals(grantPermissions[i])) {
                 return grantResults[i] == PackageManager.PERMISSION_GRANTED;
@@ -106,8 +102,7 @@ public abstract class PermissionUtils {
         public void onDismiss(DialogInterface dialog) {
             super.onDismiss(dialog);
             if (mFinishActivity) {
-                Toast.makeText(getActivity(), "REQ TOAST",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "REQ TOAST", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         }
@@ -161,11 +156,7 @@ public abstract class PermissionUtils {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // After click on Ok, request the permission.
-                            ActivityCompat.requestPermissions(getActivity(),
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    requestCode);
-                            // Do not finish the Activity while requesting permission.
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
                             mFinishActivity = false;
                         }
                     })
@@ -177,10 +168,7 @@ public abstract class PermissionUtils {
         public void onDismiss(DialogInterface dialog) {
             super.onDismiss(dialog);
             if (mFinishActivity) {
-                Toast.makeText(getActivity(),
-                        "REQ2 TOAST",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getActivity(), "REQ2 TOAST", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         }

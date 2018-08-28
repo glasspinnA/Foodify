@@ -22,15 +22,17 @@ import java.util.ArrayList;
 
 
 /**
- * Fragment för den sida i applikationen där användaren kan ta bort platser och se
+ * Fragment för den sida i applikationen där användaren kan ta bort och redigera inköpslistor
+ * och få en överblick vilka inköpslistor som finns sparade
+ * @author Oscar
  */
 public class EditFragment extends Fragment implements AdapterListener {
-
     private ArrayList<MarkerLocation> mArray;
     private DataTransfer mDataTransfer;
     private static final String TAG = "EditFragment";
     private ArrayList<MarkerLocation> arrCopy;
     private ListView mListView;
+
     public EditFragment() {
         // Required empty public constructor
     }
@@ -77,16 +79,12 @@ public class EditFragment extends Fragment implements AdapterListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
-
-        Log.d(TAG,"ONCE");
-
         ((MapsActivity) getActivity()).setActionBarTitle("Edit Location");
         setHasOptionsMenu(true);
 
         mArray = new ArrayList<>();
         mArray = getArguments().getParcelableArrayList("arrayWithMarkers");
         arrCopy = new ArrayList<>(mArray);
-        Log.d(TAG,"Size before removal:" + String.valueOf(mArray.size()));
 
         mListView = view.findViewById(R.id.lw);
         CustomListViewAdapter mAdapter = new CustomListViewAdapter(getActivity(), R.layout.custom_listview, mArray);
@@ -120,8 +118,7 @@ public class EditFragment extends Fragment implements AdapterListener {
      * @param name - Det MarkerLocation objekt (Markör) som ska tas bort
      */
     @Override
-    public void onClick(MarkerLocation name) {
-        Log.d(TAG,name.getId());
+    public void removeMarker(MarkerLocation name) {
         for(MarkerLocation i: mArray){
             if(i.getId().equals(name.getId())){
                 mArray.remove(i);
@@ -129,8 +126,6 @@ public class EditFragment extends Fragment implements AdapterListener {
                 break;
             }
         }
-        Log.d(TAG,"Size after removal:" + String.valueOf(mArray.size()));
-        Log.d(TAG,"Size of copy before removal:" + String.valueOf(arrCopy.size()));
     }
 
     /**

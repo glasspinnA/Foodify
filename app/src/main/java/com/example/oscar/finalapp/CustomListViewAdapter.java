@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Custom Adapter för lisview som visar alla locations i EditFragment
+ * @author Oscar
  */
 public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
 
@@ -60,12 +61,8 @@ public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
         TextView tvAdress = view.findViewById(R.id.tvAdress);
         TextView tvNote = view.findViewById(R.id.tvNote);
 
-
-
         Button btnDelete = view.findViewById(R.id.btnDelete);
         MarkerLocation markerLocation = mMarkerArray.get(position);
-
-
         Button btnEdit = view.findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,13 +82,12 @@ public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
                 builder.setMessage(R.string.dialog_delete_marker)
                         .setPositiveButton(R.string.yes_delete, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                mListener.onClick(getItem(position));
+                                mListener.removeMarker(getItem(position));
                                 CustomListViewAdapter.this.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Log.d(TAG,"Cancel");
                             }
                         }).show();
 

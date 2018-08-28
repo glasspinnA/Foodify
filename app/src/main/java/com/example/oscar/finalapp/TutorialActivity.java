@@ -15,6 +15,7 @@ import android.widget.Button;
 
 /**
  * Klass som sköter Activityn för hantera den guide som startar första gången applikationen körs
+ * @author Oscar
  */
 
 public class TutorialActivity extends AppCompatActivity {
@@ -27,10 +28,8 @@ public class TutorialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
-
         ViewPager mViewPager = findViewById(R.id.viewPager);
         mViewPager.setAdapter(new CustomAdapter());
-
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(mViewPager, true);
     }
@@ -77,6 +76,13 @@ public class TutorialActivity extends AppCompatActivity {
 
         }
 
+
+        /**
+         * Metod som tar bort en sida för en given position
+         * @param container -
+         * @param position - Den position som sidan i guiden har som ska tas bort
+         * @param object - Den sida i guiden som det gäller
+         */
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View)object);
@@ -88,7 +94,7 @@ public class TutorialActivity extends AppCompatActivity {
         }
 
         /**
-         * Metod som startar MapsActivity när knappen som har knapplyssnare på sig blir tryckt.
+         * Metod för att starta MapsActivity när knappen som har knapplyssnare på sig blir tryckt.
          */
         private class ButtonListener implements View.OnClickListener {
             @Override
