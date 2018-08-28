@@ -51,6 +51,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     private ArrayList<MarkerLocation> markerArray = new ArrayList<>();
     private ArrayList<MarkerLocation> copyMarkerArray;
     private boolean isEdit = false;
+    boolean isAdressFieldFilled = false;
+
 
     public CreateFragment() {
         // Required empty public constructor
@@ -78,7 +80,9 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         mAutocompleteFragment = (PlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         mAutocompleteFragment.setOnPlaceSelectedListener(this);
         mPlaceDetailsText = view.findViewById(R.id.place_details);
-        mPlaceDetailsText.setText(",");
+        mPlaceDetailsText.setText("");
+        mAutocompleteFragment.getView().findViewById(R.id.place_autocomplete_clear_button).setOnClickListener(clearButtonListener);
+
         setFilterForWidget();
 
         Bundle bundle = this.getArguments();
@@ -89,10 +93,21 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
             isEdit = true;
             mEtNote.setText(markerArray.get(position).getNote().toString());
             ((MapsActivity) getActivity()).setActionBarTitle("Edit your location");
-
         }
         return view;
     }
+
+    /**
+     * Knapplyssnare för att lyssna ifall användaren har tryckt på ta bort knappen (X:et) i adresssökfältet
+     * Används för att förhindra att en användare kan lägga till en plats utan att ha en adress inskrivet
+     */
+    private View.OnClickListener clearButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mAutocompleteFragment.setText("");
+            isAdressFieldFilled = false;
+        }
+    };
 
     /**
      * Metod som sätter ett filter.
@@ -114,14 +129,16 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     private Button.OnClickListener mButtonListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(markerArray !=null && isEdit){
+            if(markerArray !=null && isEdit && isAdressFieldFilled){
                 markerArray.remove(position);
                 mDataTransfer.removeMarker(copyMarkerArray, markerArray);
                 isEdit = false;
                 mDataTransfer.isEdit(true);
             }
 
-            if(!TextUtils.isEmpty(mEtNote.getText()) || mPlaceDetailsText.getText().toString().matches("")) {
+            Boolean isNoteFieldFilled = !TextUtils.isEmpty(mEtNote.getText());
+
+            if(isAdressFieldFilled && isNoteFieldFilled)  {
                 getLocationValues();
                 passData(new MarkerLocation(PLACE_LOCATION,
                         NOTE,
@@ -131,9 +148,12 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
                 ));
                 mEtNote.setText("");
                 mAutocompleteFragment.setText("");
-            }
-            else{
+                mAutocompleteFragment.setHint("Search");
+                isAdressFieldFilled = false;
+            }else if(!isNoteFieldFilled){
                 mEtNote.setError("Add a note is required");
+            }else if(!isAdressFieldFilled){
+                mAutocompleteFragment.setHint("ADRESS IS REQUIRED!");
             }
         }
     };
@@ -150,6 +170,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
 
+
+
     /**
      * Metod som hämtar information som finns tillgänglig för det sökresultat man har tryckt på i sökfältet när man söker efter mataffärer
      * @param place - Ett Place objekt från Google som innehåller all information om den plats man har sökt efter i widgeten
@@ -160,7 +182,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         mId = place.getId();
         mStoreName = place.getName();
         mAdress = place.getAddress();
-        mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(), place.getId(),place.getAddress(), place.getPhoneNumber(), place.getWebsiteUri()));
+        isAdressFieldFilled = true;
     }
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id, CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
