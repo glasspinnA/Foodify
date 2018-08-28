@@ -37,8 +37,8 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
         View view = LayoutInflater.from(mContext).inflate(R.layout.custom_infowindow,null);
         TextView tvStoreName = view.findViewById(R.id.tvInforStoreName);
         TextView tvNote = view.findViewById(R.id.tvInfoNote);
-        tvStoreName.setText(marker.getTitle());
-        tvNote.setText(marker.getSnippet());
+        tvStoreName.setText("Butik: " + marker.getTitle());
+        tvNote.setText("Inköpslista: \n" + marker.getSnippet());
         return view;
     }
 }

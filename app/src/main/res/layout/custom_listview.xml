@@ -5,22 +5,23 @@
 
     <TextView
         android:id="@+id/tvStoreName"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:text="TextView"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvAdress"
-        android:layout_width="220dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvNote"
-        android:layout_marginTop="48dp"
+        android:layout_alignStart="@+id/tvStoreName"
+        android:layout_marginTop="115dp"
         android:text="TextView"
         android:textAlignment="viewStart"
         android:textSize="16sp"
@@ -28,20 +29,23 @@
 
     <TextView
         android:id="@+id/tvNote"
-        android:layout_width="298dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/tvStoreName"
-        android:layout_marginTop="96dp"
-        android:text="TextView" />
+        android:layout_marginTop="230dp"
+        android:paddingBottom="20dp"
+        android:text="TextView"
+        android:textAlignment="viewStart" />
 
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignBaseline="@+id/tvNote"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:layout_marginEnd="14dp"
+        android:layout_marginTop="121dp"
         android:background="@drawable/ic_baseline_delete_24px"
         android:textStyle="bold" />
 
@@ -49,9 +53,9 @@
         android:id="@+id/btnEdit"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignEnd="@+id/btnDelete"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
+        android:layout_alignStart="@+id/btnDelete"
+        android:layout_marginTop="32dp"
         android:background="@drawable/black_ic_baseline_edit_24px" />
 
 </RelativeLayout>

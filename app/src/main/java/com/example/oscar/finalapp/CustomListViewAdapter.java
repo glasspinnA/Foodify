@@ -71,9 +71,9 @@ public class CustomListViewAdapter extends ArrayAdapter<MarkerLocation> {
             }
         });
 
-        tvStoreName.setText(markerLocation.getStoreName());
-        tvAdress.setText(markerLocation.getAdress());
-        tvNote.setText(markerLocation.getNote());
+        tvStoreName.setText("Butik: \n" + markerLocation.getStoreName());
+        tvAdress.setText("Adress: \n" + markerLocation.getAdress());
+        tvNote.setText("Inköpslista: \n" + markerLocation.getNote());
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
