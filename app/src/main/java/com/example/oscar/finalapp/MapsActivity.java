@@ -76,7 +76,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.setRetainInstance(true);
         mapFragment.getMapAsync(this);
 
         mTopToolbar = findViewById(R.id.toolbar);
@@ -92,27 +91,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(intent);
             finish();
         }
-
-
-        mArray.add(new MarkerLocation(new LatLng(3,3),
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in est vestibulum, varius neque a, cursus quam. Duis ultricies id augue laoreet placerat. Aenean vitae tellus ut tellus venenatis maximus et sollicitudin justo. Vivamus eget nisl non eros hendrerit pulvinar. In tempor sapien tempor nisi sagittis, non tristique mi lobortis. Sed ac pulvinar tellus. Aenean auctor, felis eget suscipit maximus, dui lorem fermentum sapien, quis vehicula nulla risus eget orci." ,
-                "1","Mauris in est vestibulum, varius neque a, cursus quam.",
-                "Sed ac pulvinar tellus. Aenean auctor, felis eget"));
-
-        mArray.add(new MarkerLocation(new LatLng(40,15),
-                "TEST",
-                "2",
-                "TEST",
-                "TEST"));
-
-        mArray.add(new MarkerLocation(new LatLng(20,50),
-                "Integer at est non eros aliquam tempor. Vivamus nec tortor in urna dignissim sollicitudin. Donec egestas ligula ipsum, et vulputate justo egestas id. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed feugiat, velit a cursus laoreet, risus ante scelerisque nunc, id semper ipsum ipsum vitae ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam porta mattis diam ac efficitur. Quisque ac aliquet leo.",
-                "3",
-                "Suspendisse at eros viverra, tempus",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
-
-
-
 
     }
 
@@ -134,6 +112,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(infoWindowAdapter);
         enableMyLocation();
+
+        if(mArray != null && mMap != null){
+            for(MarkerLocation m : mArray){
+                mMap.addMarker(new MarkerOptions().position(m.getLatLng()).title(m.getStoreName()).snippet(m.getNote())).showInfoWindow();
+                Circle circle = mMap.addCircle(new CircleOptions()
+                        .center(m.getLatLng())
+                        .radius(100)
+                        .strokeColor(R.color.colorPrimaryDark)
+                        .fillColor(R.color.secondaryDarkColor));
+            }
+        }
     }
 
 
