@@ -59,6 +59,9 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
 
+
+
+
     /**
      * Metod som initierar komponenter som hör till detta fragmentet så som textViews och den widget för att kunna söka efter platser.
      * Tar även emot data ifrån EditFragment ifall användaren har tryckt på redigera knappen i EditFragment.
@@ -82,8 +85,8 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         mAutocompleteFragment.setHint("Enter an address");
         mPlaceDetailsText = view.findViewById(R.id.place_details);
         mPlaceDetailsText.setText("");
-        mAutocompleteFragment.getView().findViewById(R.id.place_autocomplete_clear_button).setOnClickListener(clearButtonListener);
 
+        mAutocompleteFragment.getView().findViewById(R.id.place_autocomplete_clear_button).setOnClickListener(clearButtonListener);
         setFilterForWidget();
 
         Bundle bundle = this.getArguments();
@@ -95,8 +98,43 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
             mEtNote.setText(markerArray.get(position).getNote().toString());
             ((MapsActivity) getActivity()).setActionBarTitle("Edit your location");
         }
+
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey("adressFieldState")){
+                this.isAdressFieldFilled = savedInstanceState.getBoolean("adressFieldState");
+                if(isAdressFieldFilled){
+                    double lat = savedInstanceState.getDouble("lat");
+                    double lng = savedInstanceState.getDouble("lng");
+                    this.mLatLng = new LatLng(lat,lng);
+                    this.mStoreName = savedInstanceState.getString("storeName");
+                    this.mAdress = savedInstanceState.getString("adress");
+                }
+                this.mEtNote.setText(savedInstanceState.getString("note"));
+            }
+
+        }
+
         return view;
     }
+
+
+    /**
+     * Metod för att spara data vid rotation av telefon
+     * @param outState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(isAdressFieldFilled){
+            outState.putDouble("lat",mLatLng.latitude);
+            outState.putDouble("lng",mLatLng.longitude);
+            outState.putString("storeName",mStoreName.toString());
+            outState.putString("adress",mAdress.toString());
+            outState.putBoolean("adressFieldState", isAdressFieldFilled);
+            outState.putString("note",mEtNote.getText().toString());
+        }
+    }
+
 
     /**
      * Knapplyssnare för att lyssna ifall användaren har tryckt på ta bort knappen (X:et) i adresssökfältet
@@ -171,8 +209,6 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
     }
 
 
-
-
     /**
      * Metod som hämtar information som finns tillgänglig för det sökresultat man har tryckt på i sökfältet när man söker efter mataffärer
      * @param place - Ett Place objekt från Google som innehåller all information om den plats man har sökt efter i widgeten
@@ -186,9 +222,6 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         isAdressFieldFilled = true;
     }
 
-    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id, CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));
-    }
 
 
     /**
@@ -236,6 +269,7 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         super.onAttach(context);
         mDataTransfer = (DataTransfer) context;
     }
+
 
     /**
      * Metod som skickar ett MarkerLocation objekt med interfacet DataTransfer till MapsActivity
