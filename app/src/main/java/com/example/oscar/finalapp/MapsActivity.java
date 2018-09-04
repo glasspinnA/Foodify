@@ -139,10 +139,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,14f));
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                Criteria criteria = new Criteria();
+                Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+                if(location!=null){
+                    LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,14f));
+                }
+            }else{
+                Toast.makeText(getApplicationContext(), "Turn on your GPS!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

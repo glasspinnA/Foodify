@@ -1,6 +1,7 @@
 package com.example.oscar.finalapp;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
@@ -270,6 +271,16 @@ public class CreateFragment extends Fragment implements PlaceSelectionListener {
         mDataTransfer = (DataTransfer) context;
     }
 
+    /**
+     * Metod som blir kallad när fragmentet blir ihopbundet med dess activity. Metod som kallas för APIer längre än 23
+     * @param activity -
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mDataTransfer = (DataTransfer) activity;
+    }
 
     /**
      * Metod som skickar ett MarkerLocation objekt med interfacet DataTransfer till MapsActivity

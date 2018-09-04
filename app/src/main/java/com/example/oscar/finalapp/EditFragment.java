@@ -2,6 +2,7 @@ package com.example.oscar.finalapp;
 
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -110,6 +111,17 @@ public class EditFragment extends Fragment implements AdapterListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         mDataTransfer = (DataTransfer) context;
+    }
+
+    /**
+     * Metod som blir kallad när fragmentet blir ihopbundet med dess Context. För APIer lägre än 23
+     * @param activity -
+     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mDataTransfer = (DataTransfer) activity;
+
     }
 
     /**
